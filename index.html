@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вязальный Гороскоп для Льва</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 50%, #fef08a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 12px 32px;
+            border-radius: 50px;
+            border: 2px solid #fbbf24;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: bold;
+            background: linear-gradient(to right, #d97706, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: #92400e;
+            font-size: 18px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            padding: 24px;
+            border-radius: 16px;
+            border: 2px solid #fbbf24;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-teal {
+            background: linear-gradient(135deg, #ccfbf1 0%, #a5f3fc 100%);
+        }
+
+        .card-blue {
+            background: linear-gradient(135deg, #dbeafe 0%, #c7d2fe 100%);
+        }
+
+        .card-purple {
+            background: linear-gradient(135deg, #f3e8ff 0%, #fbcfe8 100%);
+        }
+
+        .card-amber {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef08a 100%);
+        }
+
+        .card-rose {
+            background: linear-gradient(135deg, #ffe4e6 0%, #fecaca 100%);
+        }
+
+        .card-emerald {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        }
+
+        .icon-wrapper {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon {
+            width: 36px;
+            height: 36px;
+            stroke: #92400e;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #78350f;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #fffbeb 0%, #fed7aa 100%);
+            border-radius: 16px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 4px solid #fbbf24;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            background: linear-gradient(to right, #f59e0b, #ea580c);
+            padding: 24px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .modal-icon-wrapper {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-icon {
+            width: 32px;
+            height: 32px;
+            stroke: white;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .info-box {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 2px solid;
+        }
+
+        .info-box-teal {
+            background: #ccfbf1;
+            border-color: #99f6e4;
+        }
+
+        .info-box-indigo {
+            background: #e0e7ff;
+            border-color: #c7d2fe;
+        }
+
+        .info-box-purple {
+            background: #f3e8ff;
+            border-color: #e9d5ff;
+        }
+
+        .info-box-yellow {
+            background: #fef3c7;
+            border-color: #fde68a;
+        }
+
+        .info-box-rose {
+            background: #ffe4e6;
+            border-color: #fecdd3;
+        }
+
+        .info-box h4 {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .info-box p {
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .white-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .white-box h4 {
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .white-box p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .white-box .tip {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0d9488;
+        }
+
+        .color-palette {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .color-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .color-swatch {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .color-teal {
+            background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+        }
+
+        .color-gold {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+
+        .color-beige {
+            background: linear-gradient(135deg, #f5f5dc 0%, #e8dcc4 100%);
+        }
+
+        .color-white {
+            background: #fafafa;
+            border: 2px solid #d1d5db;
+        }
+
+        .color-info p {
+            margin: 0;
+        }
+
+        .color-name {
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .color-desc {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .gradient-box {
+            background: linear-gradient(to right, #ccfbf1, #fef3c7);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .music-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .music-item {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .music-item:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .music-item h5 {
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .music-item ul {
+            list-style: none;
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.8;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        .footer-box {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid #fbbf24;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-title {
+            font-weight: bold;
+            font-size: 18px;
+            color: #78350f;
+            margin-bottom: 8px;
+        }
+
+        .footer-subtitle {
+            font-size: 14px;
+            color: #92400e;
+            margin-bottom: 16px;
+        }
+
+        .footer-copyright {
+            font-size: 12px;
+            color: #a16207;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="badge">
+                <span class="badge-text">ЛЕВ • ПЕТРОЛЬ • КРЮЧОК • ИНТЕРЬЕР</span>
+            </div>
+            <h1>Твой Вязальный Расклад</h1>
+            <p class="subtitle">Персональный гороскоп от звёзд и петель</p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card card-teal" onclick="openModal('project')">
+                <div class="icon-wrapper">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M20 7h-4V5l-2-2h-4L8 5v2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5z"/>
+                    </svg>
+                </div>
+                <h3 class="card-title">Идеальный проект на осень</h3>
+            </div>
+
+            <div class="card card-blue" onclick="openModal('pattern')">
+                <div class="icon-wrapper">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h3 class="card-title">Узор мозаики для тебя</h3>
+            </div>
+
+            <div class="card card-purple" onclick="openModal('colors')">
+                <div class="icon-wrapper">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <circle cx="13.5" cy="6.5" r=".5"/>
+                        <circle cx="17.5" cy="10.5" r=".5"/>
+                        <circle cx="8.5" cy="7.5" r=".5"/>
+                        <circle cx="6.5" cy="11.5" r=".5"/>
+                        <path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10c1.38 0 2.5-1.12 2.5-2.5 0-.61-.23-1.21-.64-1.67-.08-.09-.13-.21-.13-.33 0-.28.22-.5.5-.5H16c3.31 0 6-2.69 6-6 0-4.96-4.49-9-10-9z"/>
+                    </svg>
+                </div>
+                <h3 class="card-title">Цветовая гамма от звёзд</h3>
+            </div>
+
+            <div class="card card-amber" onclick="openModal('prediction')">
+                <div class="icon-wrapper">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                </div>
+                <h3 class="card-title">Предсказание до НГ</h3>
+            </div>
+
+            <div class="card card-rose" onclick="openModal('music')">
+                <div class="icon-wrapper">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M9 18V5l12-2v13"/>
+                        <circle cx="6" cy="18" r="3"/>
+                        <circle cx="18" cy="16" r="3"/>
+                    </svg>
+                </div>
+                <h3 class="card-title">Плейлист для вязания</h3>
+            </div>
+
+            <div class="card card-emerald" onclick="openModal('designer')">
+                <div class="icon-wrapper">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </div>
+                <h3 class="card-title">Совет от дизайнера</h3>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-box">
+                <p class="footer-title">Пусть каждая петля приносит радость!</p>
+                <p class="footer-subtitle">Ваша царственная энергия создаёт шедевры</p>
+                <div class="footer-copyright">© Вязать здорово | Магия узора | 2025</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Project -->
+    <div id="modalProject" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <div class="modal-icon-wrapper">
+                        <svg class="modal-icon" viewBox="0 0 24 24">
+                            <path d="M20 7h-4V5l-2-2h-4L8 5v2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5z"/>
+                        </svg>
+                    </div>
+                    <h3 class="modal-title">Идеальный проект на осень</h3>
+                </div>
+                <button class="close-btn" onclick="closeModal('project')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-box info-box-teal">
+                    <h4 style="color: #0f766e;">Для царственного Льва</h4>
+                    <p style="color: #115e59;">Ваша огненная натура требует проектов, которые станут центром внимания! Петроль — цвет глубины и роскоши — идеально подчеркнёт ваш королевский статус.</p>
+                </div>
+
+                <div class="white-box">
+                    <h4>Королевский плед-покрывало</h4>
+                    <p>Вяжите объёмный плед размером 150×200 см в технике оверлей-мозаики. Петроль с золотистыми и бежевыми акцентами создаст атмосферу царского дворца в вашей гостиной.</p>
+                    <p class="tip">Совет: используйте толстую пряжу (250-300 м/100 г) — проект будет готов к новогодним праздникам!</p>
+                </div>
+
+                <div class="white-box">
+                    <h4>Набор роскошных подушек</h4>
+                    <p>Комплект из 3-4 подушек (50×50 см) в петролевых тонах с геометрической мозаикой. Разные узоры, единая гамма — ваш диван превратится в трон!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pattern -->
+    <div id="modalPattern" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <div class="modal-icon-wrapper">
+                        <svg class="modal-icon" viewBox="0 0 24 24">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3 class="modal-title">Узор мозаики для тебя</h3>
+                </div>
+                <button class="close-btn" onclick="closeModal('pattern')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-box info-box-indigo">
+                    <h4 style="color: #4338ca;">Узоры для лидера</h4>
+                    <p style="color: #4f46e5;">Львы не терпят скуки! Ваши узоры должны быть яркими, выразительными и демонстрировать мастерство.</p>
+                </div>
+
+                <div class="white-box">
+                    <h4>Королевские ромбы</h4>
+                    <p>Крупные геометрические ромбы в технике оверлей — классика, которая никогда не выходит из моды. Петроль + золотисто-бежевый + белый = триумф вкуса.</p>
+                    <p style="font-size: 14px; color: #6366f1; font-style: italic;">Символизирует силу и стабильность Льва</p>
+                </div>
+
+                <div class="white-box">
+                    <h4>Солнечные лучи</h4>
+                    <p>Радиальный узор от центра — ваше солнце светит всем! Идеален для круглых подушек или центральной части пледа.</p>
+                    <p style="font-size: 14px; color: #6366f1; font-style: italic;">Отражает вашу лидерскую энергию</p>
+                </div>
+
+                <div class="white-box">
+                    <h4>Огненная волна</h4>
+                    <p>Динамичный зигзагообразный паттерн в мозаичной технике. Создаёт эффект движения и страсти — как раз для огненного знака!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Colors -->
+    <div id="modalColors" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <div class="modal-icon-wrapper">
+                        <svg class="modal-icon" viewBox="0 0 24 24">
+                            <circle cx="13.5" cy="6.5" r=".5"/>
+                            <circle cx="17.5" cy="10.5" r=".5"/>
+                            <circle cx="8.5" cy="7.5" r=".5"/>
+                            <circle cx="6.5" cy="11.5" r=".5"/>
+                            <path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10c1.38 0 2.5-1.12 2.5-2.5 0-.61-.23-1.21-.64-1.67-.08-.09-.13-.21-.13-.33 0-.28.22-.5.5-.5H16c3.31 0 6-2.69 6-6 0-4.96-4.49-9-10-9z"/>
+                        </svg>
+                    </div>
+                    <h3 class="modal-title">Цветовая гамма от звёзд</h3>
+                </div>
+                <button class="close-btn" onclick="closeModal('colors')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-box info-box-purple">
+                    <h4 style="color: #7c3aed;">Петроль — твой талисман</h4>
+                    <p style="color: #8b5cf6;">Этот благородный сине-зелёный оттенок успокаивает огненный темперамент Льва, привносит глубину и элегантность в интерьер.</p>
+                </div>
+
+                <div class="white-box">
+                    <h4>Идеальные сочетания</h4>
+                    <div class="color-palette">
+                        <div class="color-item">
+                            <div class="color-swatch color-teal"></div>
+                            <div class="color-info">
+                                <p class="color-name">Петроль базовый</p>
+                                <p class="color-desc">Основной цвет (60%)</p>
+                            </div>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-swatch color-gold"></div>
+                            <div class="color-info">
+                                <p class="color-name">Золотистый / Янтарь</p>
+                                <p class="color-desc">Акценты (20%)</p>
+                            </div>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-swatch color-beige"></div>
+                            <div class="color-info">
+                                <p class="color-name">Бежевый / Кремовый</p>
+                                <p class="color-desc">Баланс (15%)</p>
+                            </div>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-swatch color-white"></div>
+                            <div class="color-info">
+                                <p class="color-name">Белый / Молочный</p>
+                                <p class="color-desc">Свежесть (5%)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gradient-box">
+                    <h4 style="color: #92400e; margin-bottom: 8px;">Пряжа для Льва</h4>
+                    <p style="color: #1f2937; margin-bottom: 8px;"><strong>Для пледов:</strong> Хлопок с акрилом (Alize Cotton Gold, YarnArt Jeans) или плюшевая пряжа Himalaya Dolphin Baby</p>
+                    <p style="color: #1f2937;"><strong>Для подушек:</strong> Толстая пряжа 250-300 м/100 г — Drops Eskimo, Alize Lanagold Plus</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Prediction -->
+    <div id="modalPrediction" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <div class="modal-icon-wrapper">
+                        <svg class="modal-icon" viewBox="0 0 24 24">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <h3 class="modal-title">Предсказание до Нового года</h3>
+                </div>
+                <button class="close-btn" onclick="closeModal('prediction')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-box info-box-yellow">
+                    <h4 style="color: #a16207;">Что говорят звёзды?</h4>
+                    <p style="color: #ca8a04;">Осень 2025 — ваше время сиять через творчество! Петли послушны вашим рукам, а крючок станет волшебной палочкой.</p>
+                </div>
+
+                <div class="white-box">
+                    <h4>Октябрь-Ноябрь</h4>
+                    <p><strong>Первый месяц:</strong> Начнёте проект с огромным энтузиазмом! Свяжете 40% пледа или 2 подушки. Энергия Льва на пике!</p>
+                    <p style="font-size: 14px; color: #059669;">Звёзды советуют: вяжите по 1-2 часа ежедневно под любимую музыку</p>
+                </div>
+
+                <div class="white-box">
+                    <h4>Декабрь</h4>
+                    <p><strong>Финишная прямая:</strong> Меркурий благоволит завершению начатого. К 20 декабря ваш королевский плед украсит диван, вызывая восхищение гостей!</p>
+                    <p style="font-size: 14px; color: #2563eb;">Бонус: успеете связать новогодние подарки для близких</p>
+                </div>
+
+                <div style="background: linear-gradient(to right, #f3e8ff, #fbcfe8); padding: 20px; border-radius: 12px; margin-bottom: 16px;">
+                    <h4 style="color: #7c3aed; margin-bottom: 8px;">Магическое предсказание</h4>
+                    <p style="color: #8b5cf6; font-style: italic;">"К Новому году ваш дом преобразится благодаря вязаным шедеврам в петролевых тонах. Друзья будут просить связать и для них — не отказывайте, это принесёт удачу в 2026 году!"</p>
+                </div>
+
+                <div style="background: #fef3c7; padding: 16px; border-radius: 12px; border: 2px solid #fde68a;">
+                    <p style="color: #78350f; font-weight: 600; text-align: center;">Ваш счастливый день для вязания: <span style="color: #92400e;">воскресенье</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Music -->
+    <div id="modalMusic" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <div class="modal-icon-wrapper">
+                        <svg class="modal-icon" viewBox="0 0 24 24">
+                            <path d="M9 18V5l12-2v13"/>
+                            <circle cx="6" cy="18" r="3"/>
+                            <circle cx="18" cy="16" r="3"/>
+                        </svg>
+                    </div>
+                    <h3 class="modal-title">Плейлист для вязания</h3>
+                </div>
+                <button class="close-btn" onclick="closeModal('music')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="info-box info-box-rose">
+                    <h4 style="color: #be123c;">Музыка для огненного Льва</h4>
+                    <p style="color: #e11d48;">Вам нужна музыка с характером! Ритмичная, но не отвлекающая. Вот идеальный саундтрек для ваших петель.</p>
+                </div>
+
+                <div class="music-list">
+                    <div class="music-item">
+                        <h5>Для начала проекта (заряд энергии)</h5>
+                        <ul>
+                            <li>• Земфира — Хочешь?, Искала</li>
+                            <li>• Монеточка — Каждый раз, 90</li>
+                            <li>• Элли на маковом поле — Ничего не бойся</li>
+                            <li>• Stromae — Papaoutai, Alors on danse</li>
+                            <li>• Queen — Don't Stop Me Now</li>
+                        </ul>
+                    </div>
+
+                    <div class="music-item">
+                        <h5>Для процесса (фокус + вдохновение)</h5>
+                        <ul>
+                            <li>• Сплин — Выхода нет, Романс</li>
+                            <li>• Аигел — Пыяла, Татарин</li>
+                            <li>• Полина Гагарина — Кукушка (cover)</li>
+                            <li>• Ludovico Einaudi — Nuvole Bianche</li>
+                            <li>• Ólafur Arnalds — Near Light</li>
+                        </ul>
+                    </div>
+
+                    <div class="music-item">
+                        <h5>Для финальных штрихов (медитативно)</h5>
+                        <ul>
+                            <li>• Утро — Весна, Пустота</li>
+                            <li>• Shortparis — Страшно</li>
+                            <li>• Tesla Boy — Dream Machine</li>
+                            <li>• Enya — Only Time</li>
+                            <li>• Coldplay — Fix You</li>
+                        </ul>
+                    </div>
+
+                    <div class="music-item">
+                        <h5>Когда нужен драйв</h5>
+                        <ul>
+                            <li>• Би-2 — Полковнику никто не пишет</li>
+                            <li>• Мумий Тролль — Утекай</li>
+                            <li>• IC3PEAK — Грустная сука</li>
+                            <li>• Imagine Dragons — Believer</li>
+                            <li>• Arctic Monkeys — Do I Wanna Know?</li>
+                        </ul>
+                    </div>
+
+                    <div class="music-item">
+                        <h5>Инди и альтернатива (настроение)</h5>
+                        <ul>
+                            <li>• Комната культуры — Танцуй</li>
+                            <li>• Cream Soda — Никаких больше вечеринок</li>
+                            <li>• Луна — Грустный дэнс</li>
+                            <li>• Дельфин — Весна</li>
+                            <li>• Всё наоборот — Космос</li>
+                        </ul>
+                    </div>
+
+                    <div class="music-item">
+                        <h5>Классика русского рока (для души)</h5>
+                        <ul>
+                            <li>• Кино — Звезда по имени Солнце</li>
+                            <li>• Аквариум — Город золотой</li>
+                            <li>• ДДТ — Осень</li>
+                            <li>• Наутилус Помпилиус — Прогулки по воде</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(to right, #fef3c7, #fed7aa); padding: 16px; border-radius: 12px; margin-top: 16px;">
+                    <p style="color: #78350f; font-weight: 600;">Совет: Создайте плейлист длиной 2-3 часа — идеально для одной вязальной сессии!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Designer -->
+    <div id="modalDesigner" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <div class="modal-icon-wrapper">
+                        <svg class="modal-icon" viewBox="0 0 24 24">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                    </div>
+                    <h3 class="modal-title">Совет от дизайнера</h3>
+                </div>
+                <button class="close-btn" onclick="closeModal('designer')">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="background: linear-gradient(to right, #f3e8ff, #fbcfe8); padding: 16px; border-radius: 12px; margin-bottom: 16px;">
+                    <p style="color: #7c3aed; font-weight: 600; font-size: 18px; margin-bottom: 8px;">Анна Алёшенькина, дизайнер интерьеров</p>
+                    <p style="color: #8b5cf6; font-style: italic; font-size: 14px;">Специализация: вязаный текстиль в современном интерьере</p>
+                </div>
+
+                <div class="white-box">
+                    <h4 style="color: #0f766e;">Петроль — новая классика</h4>
+                    <p style="margin-bottom: 12px;">"Петроль в 2025 году — это не просто цвет, а инвестиция в вечную элегантность. В отличие от трендовых оттенков, он остаётся актуальным годами. Для Львов, ценящих роскошь без китча, это идеальный выбор."</p>
+                    <p>Сочетайте петроль с натуральным деревом (дуб, орех), латунными аксессуарами и бежевым текстилем — получите интерьер, достойный обложки журнала.</p>
+                </div>
+
+                <div class="white-box">
+                    <h4 style="color: #0f766e;">Текстура решает всё</h4>
+                    <p style="margin-bottom: 12px;">"Вязаная мозаика крючком даёт объёмную, тактильную поверхность. В петролевом цвете это выглядит как дорогая дизайнерская ткань! Игра света и тени на рельефных узорах создаёт глубину."</p>
+                    <div style="background: #ccfbf1; padding: 12px; border-radius: 8px;">
+                        <p style="color: #0f766e; font-weight: 600; font-size: 14px;">Профи-совет: положите вязаный плед на кожаный диван или велюровое кресло — контраст текстур добавит люкса!</p>
+                    </div>
+                </div>
+
+                <div class="white-box">
+                    <h4 style="color: #0f766e;">Расстановка акцентов</h4>
+                    <ul style="list-style: none; color: #4b5563; line-height: 2;">
+                        <li><span style="color: #0d9488;">▸</span> <strong>Гостиная:</strong> Плед на диване + 2 подушки на креслах</li>
+                        <li><span style="color: #0d9488;">▸</span> <strong>Спальня:</strong> Покрывало в ногах кровати (не полностью!) — это современно</li>
+                        <li><span style="color: #0d9488;">▸</span> <strong>Кабинет:</strong> Круглая подушка на рабочем кресле — комфорт и стиль</li>
+                    </ul>
+                </div>
+
+                <div style="background: linear-gradient(to right, #fef3c7, #fef08a); padding: 16px; border-radius: 12px; border: 2px solid #fde68a;">
+                    <p style="color: #78350f; font-weight: bold; text-align: center;">"Вяжите со знанием: ваши руки создают не просто вещь, а арт-объект для дома!" — Анна А.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function playSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 528; // Солнечная частота для Льва
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } catch(e) {
+                console.log('Audio not supported');
+            }
+        }
+
+        function openModal(type) {
+            playSound();
+            const modalId = 'modal' + type.charAt(0).toUpperCase() + type.slice(1);
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(type) {
+            playSound();
+            const modalId = 'modal' + type.charAt(0).toUpperCase() + type.slice(1);
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Закрытие модального окна при клике вне его
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+</body>
+</html>
